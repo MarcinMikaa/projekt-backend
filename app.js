@@ -82,7 +82,9 @@ app.post("/login", (req, res, next) => {
   })(req, res, next);
 });
 
-app.get("/shoes", (req, res) => {
+// app.use({ getShoe });
+
+app.get("/", (req, res) => {
   Shoe.find({})
     .then((data) => {
       res.json(data);
@@ -92,7 +94,17 @@ app.get("/shoes", (req, res) => {
     });
 });
 
-// app.use({ getShoe });
+app.get("/shoe/:id", (req, res) => {
+  const id = req.params.id;
+
+  Shoe.findOne({ _id: id })
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
 
 app.listen(4000, () => {
   console.log("Server Has Started");
