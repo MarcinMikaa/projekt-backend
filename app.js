@@ -2,16 +2,14 @@ const mongoose = require("mongoose");
 const express = require("express");
 const cors = require("cors");
 const passport = require("passport");
-const passportLocal = require("passport-local").Strategy;
 const cookieParser = require("cookie-parser");
-const bcrypt = require("bcryptjs");
 const session = require("express-session");
 const bodyParser = require("body-parser");
-// const { getShoe } = require("./actions/get-shoe");
-// const { register } = require("./actions/register");
-// const { login } = require("./actions/login");
-const Shoe = require("./models/shoe-model");
-const User = require("./models/user-model");
+const { getShoes } = require("./actions/get-shoes");
+const { getSelectedShoe } = require("./actions/get-selected-shoe");
+const { register } = require("./actions/register");
+const { login } = require("./actions/login");
+const { addNewShoe } = require("./actions/add-new-shoe");
 const app = express();
 
 mongoose.connect(
@@ -29,7 +27,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: "http://localhost:3000", // <--location of the react app were connecting to
+    origin: "http://localhost:3000",
     credentials: true,
   })
 );
@@ -46,65 +44,15 @@ app.use(passport.initialize());
 app.use(passport.session());
 require("./passportConfig")(passport);
 
-// app.use({ register });
+app.post("/register", register);
 
-app.post("/register", (req, res) => {
-  User.findOne({ username: req.body.username }, async (err, doc) => {
-    if (err) throw err;
-    if (doc) res.send("User Already Exists");
-    if (!doc) {
-      const hashedPassword = await bcrypt.hash(req.body.password, 10);
+app.post("/login", login);
 
-      const newUser = new User({
-        username: req.body.username,
-        email: req.body.email,
-        password: hashedPassword,
-      });
-      await newUser.save();
-      res.send("User Created");
-    }
-  });
-});
+app.get("/", getShoes);
 
-// app.use({ login });
+app.get("/shoe/:id", getSelectedShoe);
 
-app.post("/login", (req, res, next) => {
-  passport.authenticate("local", (err, user, info) => {
-    if (err) throw err;
-    if (!user) res.send("This User Doesn't Exists");
-    else {
-      req.logIn(user, (err) => {
-        if (err) throw err;
-        res.send("Succesfully Authenticated");
-        console.log(req.user);
-      });
-    }
-  })(req, res, next);
-});
-
-// app.use({ getShoe });
-
-app.get("/", (req, res) => {
-  Shoe.find({})
-    .then((data) => {
-      res.json(data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-});
-
-app.get("/shoe/:id", (req, res) => {
-  const id = req.params.id;
-
-  Shoe.findOne({ _id: id })
-    .then((data) => {
-      res.json(data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-});
+app.post("/action", addNewShoe);
 
 app.listen(4000, () => {
   console.log("Server Has Started");

@@ -1,6 +1,6 @@
-const passport = require("passport-local");
+const passport = require("passport");
 
-app.post("/login", (req, res, next) => {
+const login = (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) throw err;
     if (!user) res.send("This User Doesn't Exists");
@@ -12,6 +12,6 @@ app.post("/login", (req, res, next) => {
       });
     }
   })(req, res, next);
-});
+};
 
 module.exports = { login };
