@@ -12,6 +12,7 @@ const { login } = require("./actions/login");
 const { logout } = require("./actions/logout");
 const { getUser } = require("./actions/get-user");
 const { addNewShoe } = require("./actions/add-new-shoe");
+const { updateShoe } = require("./actions/update-shoe");
 const app = express();
 
 mongoose.connect(
@@ -48,11 +49,11 @@ require("./passportConfig")(passport);
 
 app.post("/register", register);
 app.post("/login", login);
-// app.get("/user", getUser);
 
 app.get("/", getShoes);
 app.get("/shoe/:id", getSelectedShoe);
-app.post("/action", addNewShoe);
+app.post("/add", addNewShoe);
+app.put("/update/:id", updateShoe);
 
 app.get("/user", (req, res) => {
   res.send(req.user);
