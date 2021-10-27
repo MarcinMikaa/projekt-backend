@@ -50,10 +50,11 @@ require("./passportConfig")(passport);
 app.post("/register", register);
 app.post("/login", login);
 
-app.get("/", getShoes);
-app.get("/shoe/:id", getSelectedShoe);
-app.post("/add", addNewShoe);
-app.put("/update/:id", updateShoe);
+app.get("/shoes", getShoes);
+app.get("/shoes/:id", getSelectedShoe);
+app.post("/shoes", addNewShoe);
+app.put("/shoes/:id", updateShoe);
+
 
 app.get("/user", (req, res) => {
   res.send(req.user);

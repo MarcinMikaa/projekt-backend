@@ -1,4 +1,3 @@
-const { userInfo } = require("os");
 const passport = require("passport");
 
 const login = (req, res, next) => {
@@ -9,8 +8,8 @@ const login = (req, res, next) => {
     else {
       req.logIn(user, (err) => {
         if (err) throw err;
-        res.send("Successfully Authenticated");
-        console.log(req.user);
+        res.json({ ...req.user.toJSON(), password: undefined });
+        console.log(user);
       });
     }
   })(req, res, next);
