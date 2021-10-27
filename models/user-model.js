@@ -3,7 +3,7 @@ const user = new mongoose.Schema({
   username: String,
   email: String,
   password: String,
-  isAdmin: Boolean,
+  isAdmin: { type: Boolean, default: false },
 });
 
 module.exports = mongoose.model("User", user);
