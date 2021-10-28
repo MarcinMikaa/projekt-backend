@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const express = require("express");
+const MongoStore = require("connect-mongo");
 const cors = require("cors");
 const passport = require("passport");
 const cookieParser = require("cookie-parser");
@@ -13,6 +14,8 @@ const { logout } = require("./actions/logout");
 const { getUser } = require("./actions/get-user");
 const { addNewShoe } = require("./actions/add-new-shoe");
 const { updateShoe } = require("./actions/update-shoe");
+const { addToFavorite } = require("./actions/add-to-favorite");
+const { getFavoritesShoes } = require("./actions/get-favorites-shoes");
 const app = express();
 
 mongoose.connect(
@@ -40,6 +43,9 @@ app.use(
     secret: "secretcode",
     resave: true,
     saveUninitialized: true,
+    store: MongoStore.create({
+      mongoUrl: "mongodb+srv://praktyki:praktyki2021@development.wtktz.mongodb.net/sneakers-release",
+    }),
   })
 );
 app.use(cookieParser("secretcode"));
@@ -49,22 +55,15 @@ require("./passportConfig")(passport);
 
 app.post("/register", register);
 app.post("/login", login);
+app.get("/logout", logout);
+app.get("/user", getUser);
 
 app.get("/shoes", getShoes);
+app.get("/shoes/favorites", getFavoritesShoes);
 app.get("/shoes/:id", getSelectedShoe);
 app.post("/shoes", addNewShoe);
 app.put("/shoes/:id", updateShoe);
-
-
-app.get("/user", (req, res) => {
-  res.send(req.user);
-  console.log(req.user);
-});
-
-app.get("/logout", (req, res) => {
-  req.logout();
-  res.redirect("/");
-});
+app.patch("/shoes/:id/favorite", addToFavorite);
 
 app.listen(4000, () => {
   console.log("Server Has Started");

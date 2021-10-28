@@ -15,6 +15,7 @@ const addNewShoe = (req, res) => {
       });
       await newShoe.save();
       res.send("Shoe Created");
+      console.log("Shoe Created");
     }
   });
 };
