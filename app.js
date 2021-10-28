@@ -63,7 +63,7 @@ app.get("/shoes/favorites", getFavoritesShoes);
 app.get("/shoes/:id", getSelectedShoe);
 app.post("/shoes", addNewShoe);
 app.put("/shoes/:id", updateShoe);
-app.patch("/shoes/:id/favorite", addToFavorite);
+app.patch("/shoes/:id/favorites", addToFavorite);
 
 app.listen(4000, () => {
   console.log("Server Has Started");
