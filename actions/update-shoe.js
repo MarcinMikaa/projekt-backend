@@ -24,13 +24,8 @@ const updateShoe = (req, res) => {
     .then((data) => {
       if (!data) {
         res.json({ error: "Shoe doesn't exists" });
-        res.status(404);
-        return;
       }
-
-      res.status(200);
       res.json(data);
-      console.log("Shoe updated");
     });
 };
 
