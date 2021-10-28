@@ -3,7 +3,7 @@ const Shoe = require("../models/shoe-model");
 const addNewShoe = (req, res) => {
   Shoe.findOne({ model: req.body.model }, async (err, doc) => {
     if (err) throw err;
-    if (doc) res.send("Shoe Already Exists");
+    if (doc) res.json({ message: "Shoe Already Exists" });
     if (!doc) {
       const newShoe = new Shoe({
         brand: req.body.brand,
@@ -14,7 +14,7 @@ const addNewShoe = (req, res) => {
         url: req.body.url,
       });
       await newShoe.save();
-      res.send("Shoe Created");
+      res.json({ message: "Shoe Created" });
     }
   });
 };
