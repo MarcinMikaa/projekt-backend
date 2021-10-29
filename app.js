@@ -65,6 +65,6 @@ app.post("/shoes", addNewShoe);
 app.put("/shoes/:id", updateShoe);
 app.patch("/shoes/:id/favorites", addToFavorite);
 
-app.listen(4000, () => {
+app.listen(process.env.PORT || 4000, () => {
   console.log("Server Has Started");
 });
